@@ -5,7 +5,9 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-// import DatePicker from "react-datepicker";
+import "../styles.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const locales = {
     "en-US": require("date-fns/locale/en-US")
@@ -443,15 +445,30 @@ const events =[
 ]
 
 function Home() {
-    
+    const [newEvent, setNewEvent] = useState({title: "", start: "", end: ""})
+    const [allEvents, setAllEvents] = useState(events)
+
+    function handleAddEvent() {
+        setAllEvents([...allEvents, newEvent])
+    }
+
+
     return(
         <div>
+        <h1>Calendar</h1>
+        <h3>Add New Event</h3>
+        <div class="date-picker">
+            <input type="text" placeholder="Add New Event" value={newEvent.title} onChange={(e) => setNewEvent({...newEvent, title: e.target.value})} />
+            <DatePicker placeholderText="Start Date" selected={newEvent.start} onChange={(start) => setNewEvent({...newEvent, start})} />
+            <DatePicker placeholderText="End Date" selected={newEvent.end} onChange={(end) => setNewEvent({...newEvent, end})} />
+            <button onClick={handleAddEvent}>Add Event</button>
+        </div>
             <Calendar
             localizer={localizer}
-            events={events}
+            events={allEvents}
             startAccessor="start"
             endAccessor="end"
-            style={{height: 500}} />
+            style={{height: 400}} />
         </div>
     );
 }
